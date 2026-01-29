@@ -19,6 +19,16 @@ class User(db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'profile_image': self.profile_image,
+            'created_at': self.created_at.isoformat()
+        }
+
 class Payment(db.Model):
     __tablename__ = 'payments'
     
