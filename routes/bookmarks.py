@@ -13,7 +13,8 @@ def get_user_bookmarks():
         user_id = int(get_jwt_identity())
         bookmarks = Bookmark.query.filter_by(user_id=user_id).all()
         
-        # Get the full recipe details for each bookmark
+        # Fetch the full recipe details for each bookmarked recipe
+        # This way the frontend gets everything it needs in one call
         recipes = []
         for bookmark in bookmarks:
             recipe = Recipe.query.get(bookmark.recipe_id)

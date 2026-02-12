@@ -26,7 +26,7 @@ def create_comment():
         if not data.get('recipe_id') or not data.get('content'):
             return jsonify({'error': 'recipe_id and content are required'}), 400
         
-        # Verify recipe exists
+        # Make sure they're not commenting on a recipe that doesn't exist
         recipe = Recipe.query.get_or_404(data['recipe_id'])
         
         comment = Comment(

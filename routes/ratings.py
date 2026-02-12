@@ -31,17 +31,19 @@ def create_or_update_rating():
         user_id = int(get_jwt_identity())
         data = request.get_json()
         
+        # Basic validation
         if not data.get('recipe_id') or not data.get('rating'):
             return jsonify({'error': 'recipe_id and rating are required'}), 400
         
         rating_value = data['rating']
+        # Stars must be 1-5, no half stars allowed
         if not isinstance(rating_value, int) or rating_value < 1 or rating_value > 5:
             return jsonify({'error': 'rating must be an integer between 1 and 5'}), 400
         
-        # Verify recipe exists
+        # Make sure the recipe actually exists
         recipe = Recipe.query.get_or_404(data['recipe_id'])
         
-        # Check if user already rated this recipe
+        # Check if user already rated this recipe - if so, we'll update it
         existing_rating = Rating.query.filter_by(
             user_id=user_id,
             recipe_id=data['recipe_id']
