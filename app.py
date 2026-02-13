@@ -14,7 +14,12 @@ app.config.from_object('config.Config')
 db.init_app(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
-CORS(app)
+CORS(app, origins=[
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "https://recipe-room-frontend.vercel.app",
+    "https://*.vercel.app"
+], supports_credentials=True)
 
 # Import models to register them with SQLAlchemy
 import models
