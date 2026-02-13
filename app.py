@@ -20,8 +20,7 @@ CORS(app, origins=[
     "https://recipe-room-frontend.vercel.app"
 ], supports_credentials=True)
 
-# Import models to register them with SQLAlchemy
-import models
+from models import User, Recipe, Group, Bookmark, Rating, Comment, GroupInvitation
 
 from routes.auth import auth_bp
 from routes.payments import payment_bp
