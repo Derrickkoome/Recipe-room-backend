@@ -112,6 +112,8 @@ PAYD_SECRET_KEY=your-payd-key
 
 ## Database Models
 
+![Database Schema](./screenshots/db-diagram.png)
+
 ### User
 - id, username, email, password_hash, profile_image, created_at
 
@@ -173,6 +175,10 @@ Authorization: Bearer <token>
 4. Add environment variables
 5. Deploy
 
-## Author
+## Authors
 
-Built by Derrick Koome
+- Derrick Koome
+- Sasha Lisa
+- Joy Kori
+- Alex Mureti
+- Ian Nassore
