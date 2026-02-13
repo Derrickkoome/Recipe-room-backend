@@ -25,6 +25,7 @@ from routes.recipes import recipes_bp
 from routes.comments import comments_bp
 from routes.ratings import ratings_bp
 from routes.bookmarks import bookmarks_bp
+from routes.seed import seed_bp
 
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(payment_bp, url_prefix='/api/payments')
@@ -33,6 +34,7 @@ app.register_blueprint(recipes_bp, url_prefix='/api/recipes')
 app.register_blueprint(comments_bp, url_prefix='/api/comments')
 app.register_blueprint(ratings_bp, url_prefix='/api/ratings')
 app.register_blueprint(bookmarks_bp, url_prefix='/api/bookmarks')
+app.register_blueprint(seed_bp, url_prefix='/api')
 
 # Auto-initialize database on startup
 with app.app_context():
