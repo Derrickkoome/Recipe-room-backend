@@ -17,8 +17,7 @@ jwt = JWTManager(app)
 CORS(app, origins=[
     "http://localhost:5173",
     "http://localhost:3000",
-    "https://recipe-room-frontend.vercel.app",
-    "https://*.vercel.app"
+    "https://recipe-room-frontend.vercel.app"
 ], supports_credentials=True)
 
 # Import models to register them with SQLAlchemy
