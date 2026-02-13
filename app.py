@@ -40,5 +40,10 @@ app.register_blueprint(comments_bp, url_prefix='/api/comments')
 app.register_blueprint(ratings_bp, url_prefix='/api/ratings')
 app.register_blueprint(bookmarks_bp, url_prefix='/api/bookmarks')
 
+# Auto-initialize database on startup
+with app.app_context():
+    db.create_all()
+    print("Database tables created successfully")
+
 if __name__ == '__main__':
     app.run(debug=True)
