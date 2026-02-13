@@ -31,9 +31,19 @@ def register():
 def login():
     try:
         data = request.get_json()
-        user = User.query.filter_by(email=data['email']).first()
+        # Support login with either username or email
+        username_or_email = data.get('username') or data.get('email')
+        password = data.get('password')
         
-        if user and user.check_password(data['password']):
+        if not username_or_email or not password:
+            return jsonify({'error': 'Username/email and password required'}), 400
+        
+        # Try to find user by email or username
+        user = User.query.filter(
+            (User.email == username_or_email) | (User.username == username_or_email)
+        ).first()
+        
+        if user and user.check_password(password):
             access_token = create_access_token(identity=str(user.id))
             return jsonify({
                 'access_token': access_token,
