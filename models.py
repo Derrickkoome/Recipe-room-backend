@@ -99,18 +99,22 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
+    image_url = db.Column(db.String(255))
     created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     creator = db.relationship('User', backref='created_groups')
     members = db.relationship('GroupMember', backref='group', lazy=True, cascade='all, delete-orphan')
+    invitations = db.relationship('GroupInvitation', backref='group', lazy=True, cascade='all, delete-orphan')
     
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
+            'image_url': self.image_url,
             'created_by': self.created_by,
+            'creator_name': self.creator.username if self.creator else None,
             'created_at': self.created_at.isoformat(),
             'member_count': len(self.members)
         }
@@ -193,7 +197,6 @@ class Bookmark(db.Model):
     
     user = db.relationship('User', backref='bookmarks')
     
-    # Unique constraint: one bookmark per user per recipe
     __table_args__ = (db.UniqueConstraint('user_id', 'recipe_id', name='unique_user_recipe_bookmark'),)
     
     def to_dict(self):
@@ -201,5 +204,29 @@ class Bookmark(db.Model):
             'id': self.id,
             'recipe_id': self.recipe_id,
             'user_id': self.user_id,
+            'created_at': self.created_at.isoformat()
+        }
+
+class GroupInvitation(db.Model):
+    __tablename__ = 'group_invitations'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey('groups.id'), nullable=False)
+    inviter_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    invitee_email = db.Column(db.String(120), nullable=False)
+    status = db.Column(db.String(20), default='pending')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    inviter = db.relationship('User', backref='sent_invitations')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'group_id': self.group_id,
+            'group_name': self.group.name if self.group else None,
+            'inviter_id': self.inviter_id,
+            'inviter_name': self.inviter.username if self.inviter else None,
+            'invitee_email': self.invitee_email,
+            'status': self.status,
             'created_at': self.created_at.isoformat()
         }
