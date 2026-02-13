@@ -93,3 +93,12 @@ def upload_profile_image():
         return jsonify({'image_url': result['secure_url']}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@auth_bp.route('/profile', methods=['DELETE'])
+@jwt_required()
+def delete_account():
+    user_id = int(get_jwt_identity())
+    user = User.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'Account deleted'}), 200
